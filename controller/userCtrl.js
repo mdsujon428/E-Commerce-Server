@@ -22,7 +22,11 @@ const createUser = async (req, res) => {
             })
         }
         } catch (error) {
-            console.log("Error message From here : ",error);
+            res.json({
+                ...error,
+                message: "Failed to create account",
+                success:false
+           })
         }
     } else {
         res.status(500).json({
