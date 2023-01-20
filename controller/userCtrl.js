@@ -30,16 +30,16 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     
 })
 
+//GET ALL User
+const getAllUser = asyncHandler(async (req, res) => {
+    try {
+        const getUsers = await User.find();
+        console.log(getUsers)
+        res.status(200).json(getUsers);
+    } catch (error) {
+        console.log(error)
+        throw new Error(error);
+    }
+})
 
-module.exports = { createUser, loginUserCtrl }
-
-/**
- * {
-            _id: findUser?._id,
-            firstName: findUser?.firstName,
-            lastName: findUser?.lastName,
-            email: findUser?.email,
-            mobile: findUser?.email,
-            token:generateToken(findUser?._id)
-       }
- */
+module.exports = { createUser, loginUserCtrl,getAllUser }
