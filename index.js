@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 // app.use("/", (req, res) => {
 //     res.send(`E commerce server is running at port ${PORT}`)
 // })
-app.use('/api/user',authRoute)
+app.use('/api/user', authRoute);
 
 app.use(notFound);
 app.use(errorHandler);
