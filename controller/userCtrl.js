@@ -34,12 +34,21 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 const getAllUser = asyncHandler(async (req, res) => {
     try {
         const getUsers = await User.find();
-        console.log(getUsers)
         res.status(200).json(getUsers);
     } catch (error) {
-        console.log(error)
         throw new Error(error);
     }
 })
 
-module.exports = { createUser, loginUserCtrl,getAllUser }
+
+const getAUser = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    try {
+        const getSingleUser = await User.findById(id);
+        res.json({ getSingleUser });
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+module.exports = { createUser, loginUserCtrl,getAllUser,getAUser }
