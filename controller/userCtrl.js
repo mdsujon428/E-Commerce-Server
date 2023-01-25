@@ -45,7 +45,8 @@ const updatedAUser = asyncHandler(async(req, res) => {
         },
         {
             new:true
-        }
+            }
+        // console.log(c)
         )
         res.json(updateUser);
     } catch (error) {
