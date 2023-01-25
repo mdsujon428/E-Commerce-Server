@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const { generateToken } = require('../config/jwtToken');
+const { validateMongoDbId } = require('../utils/validateMongodbId');
 
 // create a user
 const createUser = asyncHandler(async (req, res) => {
@@ -36,7 +37,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 const updatedAUser = asyncHandler(async(req, res) => {
     const { _id } = req.user;
-    console.log(_id);
+    validateMongoDbId(_id);
     try {
         updateUser = await User.findByIdAndUpdate(_id, {
             firstName: req?.body?.firstName,
@@ -68,6 +69,7 @@ const getAllUser = asyncHandler(async (req, res) => {
 
 const getAUser = asyncHandler(async (req, res) => {
     const { _id } = req.user;
+    validateMongoDbId(_id);
     try {
         const getSingleUser = await User.findById(_id);
         res.json({ getSingleUser });
@@ -79,6 +81,7 @@ const getAUser = asyncHandler(async (req, res) => {
 // delete a user by id
 const deleteAUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
+    validateMongoDbId(id);
     try {
         const deleteSingleUser = await User.findByIdAndDelete(id);
         res.json({ deleteSingleUser });
@@ -90,6 +93,7 @@ const deleteAUser = asyncHandler(async (req, res) => {
 // block to a user
 const blockUser = asyncHandler(async(req, res) => {
     const { id } = req.params;
+    validateMongoDbId(id);
     try {
         const block =await User.findByIdAndUpdate(
             id,
@@ -112,6 +116,7 @@ const blockUser = asyncHandler(async(req, res) => {
 
 const unblockUser = asyncHandler(async(req, res) => {
     const { id } = req.params;
+    validateMongoDbId(id);
     try {
         const unBlock = await User.findByIdAndUpdate(
             id,
@@ -130,4 +135,13 @@ const unblockUser = asyncHandler(async(req, res) => {
     }
 })
 
-module.exports = { createUser, loginUserCtrl,getAllUser,getAUser,deleteAUser,updatedAUser ,blockUser,unblockUser}
+module.exports = {
+    getAUser,
+    blockUser,
+    createUser,
+    getAllUser,
+    deleteAUser,
+    unblockUser,
+    loginUserCtrl,
+    updatedAUser,
+}
