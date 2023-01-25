@@ -20,7 +20,20 @@ const authMiddleWare = asyncHandler(async (req, res,next) => {
         throw new Error("There is token attached to header");
     }
 })
-module.exports = { authMiddleWare };
+
+const isAdmin = asyncHandler(async (req, res,next) => {
+    const { email } = req.user;
+    const adminUser = User.findOne({ email });
+    if (adminUser.role !== "admin") {
+        req.user["message"] = "Your are not an admin";
+        next();
+    } else {
+        req.user["message"] = "Your are an admin";
+        next();
+    }
+})
+
+module.exports = { authMiddleWare,isAdmin };
 
 /*
  

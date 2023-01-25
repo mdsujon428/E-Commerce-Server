@@ -35,10 +35,11 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 
 const updatedAUser = asyncHandler(async(req, res) => {
-    const { id } = req.params;
+    const { _id } = req.user;
+    console.log(_id);
     try {
-        updateUser = await User.findByIdAndUpdate(id, {
-            firstName: req.body?.firstName,
+        updateUser = await User.findByIdAndUpdate(_id, {
+            firstName: req?.body?.firstName,
             lastName: req?.body?.lastName,
             email: req.body?.email,
             mobile:req.body?.mobile
@@ -48,6 +49,7 @@ const updatedAUser = asyncHandler(async(req, res) => {
             }
         // console.log(c)
         )
+        // console.log(updatedAUser)
         res.json(updateUser);
     } catch (error) {
         throw new Error(error);
@@ -67,9 +69,9 @@ const getAllUser = asyncHandler(async (req, res) => {
 // get a user by id
 
 const getAUser = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const { _id } = req.user;
     try {
-        const getSingleUser = await User.findById(id);
+        const getSingleUser = await User.findById(_id);
         res.json({ getSingleUser });
     } catch (error) {
         throw new Error(error);
