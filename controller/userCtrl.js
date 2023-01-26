@@ -2,6 +2,8 @@ const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const { generateToken } = require('../config/jwtToken');
 const { validateMongoDbId } = require('../utils/validateMongodbId');
+const { generateRefreshToken } = require('../config/refreshToken');
+
 
 // create a user
 const createUser = asyncHandler(async (req, res) => {
@@ -21,6 +23,18 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     // if user exists or not 
     const findUser = await User.findOne({ email });
     if (findUser && findUser.isPasswordMatched(password)) {
+        const refreshToken = await generateRefreshToken(findUser?._id);
+        const updateUser = await User.findByIdAndUpdate(
+            findUser._id,
+            {
+            refreshToken
+            },
+            {new:true}
+        )
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            maxAge:72*60*60*1000,
+        })
         res.json({
             firstName: findUser?.firstName,
             lastName: findUser?.lastName,
