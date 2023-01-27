@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler');
 const { generateToken } = require('../config/jwtToken');
 const { validateMongoDbId } = require('../utils/validateMongodbId');
 const { generateRefreshToken } = require('../config/refreshToken');
+const jwt = require('jsonwebtoken');
 
 
 // create a user
@@ -42,13 +43,47 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             mobile: findUser?.mobile,
             token:generateToken(findUser._id)
         })
+       
     } else {
         throw new Error("Email or password is Invalid")
     }
     
 })
 
+// handle refresh token
+const handleRefreshToken = asyncHandler(async (req, res) => {
+    const fullCookie = req.headers?.cookie;
+    cookies = fullCookie.split(';');
+    let cookieObject = {};
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        if (cookie.charAt(0) === " ") {
+            cookie = cookie.substring(1,)
+        }
+        const cookieName = cookie.substring(0, cookie.indexOf('='));
+        const cookieValue = cookie.substring(cookieName.length + 1,);
+        
+        cookieObject = { ...cookieObject };
+        cookieObject[cookieName] = cookieValue;
+    }
+    if(!cookieObject.refreshToken) throw new Error("No Refresh Token in Cookies")
+    const refreshToken = cookieObject.refreshToken;
+    const user = await User.findOne({ refreshToken });
+    if (!user) throw new Error("No Refresh token in the db or not matched");
+    jwt.verify(
+        refreshToken,
+        process.env.JWT_SECRET,
+        (err, decoded) => {
+        if (err || user.id !== decoded.id) {
+            throw new Error("There is something wrong with refresh token");
+            } 
+            const accessToken = generateToken(user?._id);
+            res.json({accessToken})
+    });
 
+})
+
+// Update a user
 const updatedAUser = asyncHandler(async(req, res) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
@@ -158,4 +193,5 @@ module.exports = {
     unblockUser,
     loginUserCtrl,
     updatedAUser,
+    handleRefreshToken
 }
