@@ -53,6 +53,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 // handle refresh token
 const handleRefreshToken = asyncHandler(async (req, res) => {
     const fullCookie = req.headers?.cookie;
+    if (fullCookie === undefined) throw new Error("There are no cookies");
     cookies = fullCookie.split(';');
     let cookieObject = {};
     for (let i = 0; i < cookies.length; i++) {
@@ -82,6 +83,48 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
     });
 
 })
+
+const logout = asyncHandler(async (req, res) => {
+    const fullCookie = req.headers?.cookie;
+    
+    if (fullCookie === undefined) throw new Error("There are no cookies");
+
+    const cookies = fullCookie.split(";");
+    
+    let cookieObject = {};
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+
+        if (cookie.charAt(0) === " ") {
+            cookie = cookie.substring(1,);
+        }
+        const cookieName = cookie.substring(0, cookie.indexOf("="));
+        const cookieValue = cookie.substring(cookieName + 1,);
+       
+        cookieObject = { ...cookieObject };
+        cookieObject[cookieName] = cookieValue;
+    }
+    if (!cookieObject.refreshToken) throw new Error("No Refresh Token in Cookies");
+    const refreshToken = cookieObject.refreshToken;
+    const user = User.findOne({ refreshToken });
+    if (!user) {
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: true
+        });
+        return res.sendStatus(204); // forbidden
+    }
+    await User.findOneAndUpdate(refreshToken, {
+        refreshToken: ""
+    })
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true
+    });
+    res.sendStatus(204);  // forbidden
+});
+
 
 // Update a user
 const updatedAUser = asyncHandler(async(req, res) => {
@@ -193,5 +236,6 @@ module.exports = {
     unblockUser,
     loginUserCtrl,
     updatedAUser,
-    handleRefreshToken
+    handleRefreshToken,
+    logout
 }
