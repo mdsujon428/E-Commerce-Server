@@ -1,6 +1,8 @@
 const Product = require('../models/productModel');
 const asyncHandler = require('express-async-handler');
 
+
+// create product
 const createProduct = asyncHandler(async (req, res) => {
     try {
         const newProduct = await Product.create(req.body);
@@ -12,4 +14,16 @@ const createProduct = asyncHandler(async (req, res) => {
     console.log("Hello product ctrl is ready.")
 })
 
-module.exports ={createProduct }
+// get a product
+const getAProduct = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+      try {
+          const getAProduct = await Product.findById(id);
+          res.json(getAProduct);
+      } catch (error) {
+        throw new Error(error)
+      }
+})
+
+
+module.exports ={createProduct,getAProduct }
