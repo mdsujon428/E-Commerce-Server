@@ -22,13 +22,16 @@ const authMiddleWare = asyncHandler(async (req, res,next) => {
 })
 
 const isAdmin = asyncHandler(async (req, res,next) => {
-
+    console.log(req.user);
     if (req?.user?.role !== "admin") {
-        req.user["message"] = "Your are not an admin";
-        next();
+        throw new Error("You are not an admin")
+        //req.user["message"] = "Your are not an admin";
+        //next();
     } else {
-        req.user["message"] = "Your are an admin";
+        //req.user["message"] = "Your are an admin";
         next();
+        
+        //throw new Error({message:"Your are not an admin"})
     }
 })
 
