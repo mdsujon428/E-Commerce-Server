@@ -7,10 +7,12 @@ const PORT = process.env.PORT || 8081;
 const { default: mongoose, model } = require('mongoose');
 const authRoute = require('./routes/authRoute');
 const productRoute = require('./routes/productRoute');
+const morgan = require('morgan');
 const dbConnect = require('./config/dbConnect');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
 
 dbConnect();
+// app.use(morgan("dev"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.unsubscribe(cookieParser());
