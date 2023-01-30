@@ -23,7 +23,8 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     // if user exists or not 
     const findUser = await User.findOne({ email });
-    if (findUser && findUser.isPasswordMatched(password)) {
+   
+    if (findUser && await findUser.isPasswordMatched(password)) {
         const refreshToken = await generateRefreshToken(findUser?._id);
         const updateUser = await User.findByIdAndUpdate(
             findUser._id,
@@ -48,7 +49,6 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     } else {
         throw new Error("Email or password is Invalid")
     }
-    
 })
 
 // handle refresh token
@@ -125,7 +125,6 @@ const logout = asyncHandler(async (req, res) => {
     });
     res.sendStatus(204);  // forbidden
 });
-
 
 // Update a user
 const updatedAUser = asyncHandler(async(req, res) => {
@@ -228,6 +227,22 @@ const unblockUser = asyncHandler(async(req, res) => {
     }
 })
 
+const updatePassword = asyncHandler(async(req, res) =>{
+    const { _id } = req.user;
+    const {password} = req.body;
+    validateMongoDbId(_id);
+    const user = await User.findById(_id);
+
+    if (password) {
+        user.password = password;
+        const updatedPassword = await user.save();
+        //console.log(updatePassword)
+        res.json(updatedPassword)
+    } else {
+        throw new Error(user)
+    }
+})
+
 module.exports = {
     getAUser,
     blockUser,
@@ -238,5 +253,6 @@ module.exports = {
     loginUserCtrl,
     updatedAUser,
     handleRefreshToken,
+    updatePassword,
     logout
 }
