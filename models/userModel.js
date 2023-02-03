@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'); // Erase if already required
 const bcrypt = require('bcrypt');
+const crypto = require('crypto')
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema({
@@ -60,7 +61,6 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.isPasswordMatched = async function (enteredPassword) {
     //enteredPassword = await bcrypt.hash(enteredPassword.toString(), true);
-    
     return await bcrypt.compare(enteredPassword,this.password);
 }
 
