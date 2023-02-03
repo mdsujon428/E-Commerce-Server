@@ -12,16 +12,20 @@ const {
     logout,
     handleRefreshToken,
     updatePassword,
-    forgotPasswordToken} = require('../controller/userCtrl');
+    forgotPasswordToken,
+    resetPassword} = require('../controller/userCtrl');
 const { authMiddleWare ,isAdmin} = require('../middlewares/authMiddleware');
 
 router.post("/register", createUser);
 router.post("/forgot-password-token",forgotPasswordToken)
+router.put("/reset-password/:token",resetPassword)
+
 router.get("/login", loginUserCtrl);
 router.get("/all-users", getAllUser);
 router.get("/refresh",handleRefreshToken);
 router.get("/single-user", authMiddleWare, isAdmin, getAUser);
-router.get("/logout",logout)
+router.get("/logout", logout)
+
 router.delete("/:id",deleteAUser);
 router.put("/block-user/:id", authMiddleWare, isAdmin, blockUser);
 router.put("/password",authMiddleWare,updatePassword)
