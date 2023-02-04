@@ -5,11 +5,13 @@ const {
     updateBlog,
     getBlog,
     getAllBlogs,
-    deleteBlog
+    deleteBlog,
+    likeBlog
 } = require('../controller/blogCtrl')
 const router = express.Router();
 
 router.post("/",authMiddleWare,isAdmin,createBlog)
+router.put("/likes",authMiddleWare,likeBlog)
 router.put("/:id",authMiddleWare,isAdmin,updateBlog)
 router.get("/:id",getBlog)
 router.get("/",getAllBlogs)
