@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 8081;
 const { default: mongoose, model } = require('mongoose');
 const authRoute = require('./routes/authRoute');
 const productRoute = require('./routes/productRoute');
+const blogRoute = require('./routes/blogRoute');
 const morgan = require('morgan');
 const dbConnect = require('./config/dbConnect');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
@@ -22,6 +23,7 @@ app.unsubscribe(cookieParser());
 // })
 app.use('/api/user', authRoute);
 app.use('/api/product',productRoute)
+app.use('/api/blog',blogRoute)
 
 app.use(notFound);
 app.use(errorHandler);
