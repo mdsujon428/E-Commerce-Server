@@ -47,7 +47,6 @@ const getBlog = asyncHandler(async (req, res) => {
     }
 })
 
-
 // get all blogs
 const getAllBlogs = asyncHandler(async (req, res) => {
     try {
@@ -57,9 +56,22 @@ const getAllBlogs = asyncHandler(async (req, res) => {
         throw new Error(error);
     }
 })
+
+// delete a blog by id
+const deleteBlog = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deleteBlog = await Blog.findByIdAndDelete(id);
+        res.json(deleteBlog)
+    } catch (error) {
+        throw new Error(error)
+    }
+
+})
 module.exports = {
     createBlog,
     updateBlog,
     getBlog,
-    getAllBlogs
+    getAllBlogs,
+    deleteBlog
 }
