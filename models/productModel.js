@@ -23,7 +23,7 @@ var productSchema = new mongoose.Schema({
         },
     category: {
         type:String,  // mongoose.Schema.Types.ObjectId
-       required:true,
+        required:true,
         },
     brand: {
         type: String,

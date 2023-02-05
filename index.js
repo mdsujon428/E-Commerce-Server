@@ -8,6 +8,8 @@ const { default: mongoose, model } = require('mongoose');
 const authRoute = require('./routes/authRoute');
 const productRoute = require('./routes/productRoute');
 const blogRoute = require('./routes/blogRoute');
+const categoryRoute = require('./routes/prodCategoryRoute');
+
 const morgan = require('morgan');
 const dbConnect = require('./config/dbConnect');
 const { notFound, errorHandler } = require('./middlewares/errorHandler');
@@ -24,6 +26,7 @@ app.unsubscribe(cookieParser());
 app.use('/api/user', authRoute);
 app.use('/api/product',productRoute)
 app.use('/api/blog',blogRoute)
+app.use('/api/category',categoryRoute)
 
 app.use(notFound);
 app.use(errorHandler);
