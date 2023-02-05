@@ -26,7 +26,22 @@ const updateCategory = asyncHandler(async (req, res) => {
     }
 })
 
+// get blog category
+const getCategory = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    validateMongoDbId(id);
+    try {
+        const getACategory = await blogCategory.findById(id);
+        res.json(getACategory)
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+
+
 module.exports = {
     createCategory,
     updateCategory,
+    getCategory
 }
