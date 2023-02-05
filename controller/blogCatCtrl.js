@@ -53,7 +53,7 @@ const deleteACategory = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDbId(id);
     try {
-        const deleteCategory = await prodCategory.findByIdAndDelete(id);
+        const deleteCategory = await blogCategory.findByIdAndDelete(id);
         res.json(deleteCategory)
     } catch (error) {
         throw new Error(error);
