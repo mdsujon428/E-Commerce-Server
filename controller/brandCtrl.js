@@ -40,8 +40,21 @@ const deleteCategory = asyncHandler(async (req, res) => {
     }
 })
 
+//get a brand category
+const getCategory = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    validateMongoDbId(id);
+    try {
+        const getACategory = await brandCategory.findById(id);
+        res.json(getACategory);
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
 module.exports = {
     createCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getCategory
 }
