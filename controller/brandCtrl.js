@@ -12,4 +12,23 @@ const createCategory = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports ={createCategory}
+//update brand category
+const updateCategory = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    validateMongoDbId(id);
+   try {
+       const updateCategory = await brandCategory.findByIdAndUpdate(
+           id,
+           req.body,
+           { new: true }
+       );
+       res.json(updateCategory);
+   } catch (error) {
+       throw new Error(error)
+   }
+})
+
+module.exports = {
+    createCategory,
+    updateCategory
+}
