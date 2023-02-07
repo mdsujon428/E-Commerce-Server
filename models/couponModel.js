@@ -1,6 +1,6 @@
 const mongoose = require('mongoose'); // Erase if already required
 
-// Declare the Schema of the Mongo model
+// Declare the Schema coupon
 var couponSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -9,7 +9,7 @@ var couponSchema = new mongoose.Schema({
         uppercase:true
     },
     expiry: {
-        type: String,
+        type: Date,
         required: true,
     },
     discount: {
