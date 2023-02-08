@@ -3,7 +3,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv').config();
-const PORT = process.env.PORT || 8081;
 const { default: mongoose, model } = require('mongoose');
 const authRoute = require('./routes/authRoute');
 const productRoute = require('./routes/productRoute');
@@ -12,6 +11,8 @@ const categoryRoute = require('./routes/prodCategoryRoute');
 const blogCategoryRoute = require('./routes/blogCatRoute');
 const couponRoute = require('./routes/couponRoute');
 const brandCategoryRoute = require('./routes/brandRoute');
+
+const PORT = process.env.PORT || 8081;
 
 const morgan = require('morgan');
 const dbConnect = require('./config/dbConnect');
