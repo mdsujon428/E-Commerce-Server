@@ -21,7 +21,7 @@ const createUser = asyncHandler(async (req, res) => {
 })
 
 // login a user 
-const loginUserCtrl = asyncHandler(async (req, res) => {
+const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     // if user exists or not 
     const findUser = await User.findOne({ email });
@@ -52,6 +52,40 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
         throw new Error("Email or password is Invalid")
     }
 })
+
+// admin login
+const loginAdmin = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+    // if user exists or not 
+    const findAdmin = await User.findOne({ email });
+    if(findAdmin.role !== "admin") throw new Error("Not Authorized")
+    if (findAdmin && await findAdmin.isPasswordMatched(password)) {
+        const refreshToken = await generateRefreshToken(findAdmin?._id);
+        const updateAdmin = await User.findByIdAndUpdate(
+            findAdmin._id,
+            {
+            refreshToken
+            },
+            {new:true}
+        )
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            maxAge:72*60*60*1000,
+        })
+        res.json({
+            firstName: findAdmin?.firstName,
+            lastName: findAdmin?.lastName,
+            email: findAdmin?.email,
+            mobile: findAdmin?.mobile,
+            role:findAdmin?.role,
+            token:generateToken(findAdmin._id)
+        })
+       
+    } else {
+        throw new Error("Email or password is Invalid")
+    }
+})
+
 
 // handle refresh token
 const handleRefreshToken = asyncHandler(async (req, res) => {
@@ -293,8 +327,9 @@ module.exports = {
     createUser,
     getAllUser,
     deleteAUser,
+    loginAdmin,
     unblockUser,
-    loginUserCtrl,
+    loginUser,
     updatedAUser,
     handleRefreshToken,
     updatePassword,
