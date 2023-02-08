@@ -303,7 +303,6 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
 })
 
 const resetPassword = asyncHandler(async (req, res) => {
-    //res.json({message:"Hello"})
     const { password } = req.body;
     const { token } = req.params;
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -320,6 +319,15 @@ const resetPassword = asyncHandler(async (req, res) => {
     res.json(user);
 })
 
+const getWishList = asyncHandler(async(req, res)=> {
+    const { _id } = req.user;
+    try {
+        const findUser = await User.findById(_id).populate('wishlist')
+        res.status(200).json(findUser);
+    } catch (error) {
+        throw new Error(error);
+    }
+})
 
 module.exports = {
     getAUser,
@@ -335,5 +343,6 @@ module.exports = {
     updatePassword,
     logout,
     forgotPasswordToken,
-    resetPassword
+    resetPassword,
+    getWishList
 }
