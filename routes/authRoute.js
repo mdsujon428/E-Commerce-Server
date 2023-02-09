@@ -15,7 +15,8 @@ const {
     updatePassword,
     forgotPasswordToken,
     resetPassword,
-    getWishList} = require('../controller/userCtrl');
+    getWishList,
+    saveAddress} = require('../controller/userCtrl');
 const { authMiddleWare ,isAdmin} = require('../middlewares/authMiddleware');
 
 router.post("/register", createUser);
@@ -35,5 +36,6 @@ router.put("/block-user/:id", authMiddleWare, isAdmin, blockUser);
 router.put("/password",authMiddleWare,updatePassword)
 router.put("/unblock-user/:id",authMiddleWare,isAdmin, unblockUser);
 router.put("/edit-user",authMiddleWare,isAdmin, updatedAUser);
+router.put("/save-address",authMiddleWare, saveAddress);
 
 module.exports = router;

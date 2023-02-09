@@ -4,41 +4,56 @@ const crypto = require('crypto')
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema({
-    firstName:{
+    firstName: {
         type: String,
-        required:true
+        required: true
     },
-    lastName:{
-        type:String,
-        required:false,
+    lastName: {
+        type: String,
+        required: false,
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true,
+    email: {
+        type: String,
+        required: true,
+        unique: true,
     },
-    mobile:{
-        type:String,
-        required:true,
-        unique:true,
+    mobile: {
+        type: String,
+        required: true,
+        unique: true,
     },
-    password:{
-        type:String,
-        required:true,
+    password: {
+        type: String,
+        required: true,
     },
     role: {
         type: String,
-        default:'user'
+        default: 'user'
     },
     isBlocked: {
         type: Boolean,
-        default:false
+        default: false
     },
     cart: {
         type: Array,
-        default:[]
+        default: []
     },
-    address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+    addresses: [  //  [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }]
+            {
+            address: {
+                type: String,
+                default:""
+            },
+            home: {
+                type: Boolean,
+                default:true
+            },
+            office: {
+                type: Boolean,
+                default:false
+            },
+            }
+        ],
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     refreshToken: {
         type:String

@@ -183,6 +183,33 @@ const updatedAUser = asyncHandler(async(req, res) => {
     }
 })
 
+// Save user Address
+const saveAddress = asyncHandler(async (req, res,next) => {
+    const { _id } = req.user;
+    validateMongoDbId(_id);
+    console.log(req.body)
+    try {
+        const saveAddress = await User.findByIdAndUpdate(
+            _id,
+            {
+                $push: {
+                    addresses: {
+                        address: req.body?.address,
+                        home: req.body?.home,
+                        office:req.body?.office
+                    }
+                }
+            },
+            {
+            new:true
+            }
+        )
+        res.json(saveAddress);
+    } catch (error) {
+        
+    }
+})
+
 //GET ALL User
 const getAllUser = asyncHandler(async (req, res) => {
     try {
@@ -344,5 +371,6 @@ module.exports = {
     logout,
     forgotPasswordToken,
     resetPassword,
-    getWishList
+    getWishList,
+    saveAddress
 }
