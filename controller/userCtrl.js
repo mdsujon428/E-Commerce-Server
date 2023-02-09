@@ -187,7 +187,6 @@ const updatedAUser = asyncHandler(async(req, res) => {
 const saveAddress = asyncHandler(async (req, res,next) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
-    console.log(req.body)
     try {
         const saveAddress = await User.findByIdAndUpdate(
             _id,

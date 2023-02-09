@@ -33,8 +33,8 @@ router.get("/logout", logout)
 
 router.delete("/:id",deleteAUser);
 router.put("/block-user/:id", authMiddleWare, isAdmin, blockUser);
-router.put("/password",authMiddleWare,updatePassword)
 router.put("/unblock-user/:id",authMiddleWare,isAdmin, unblockUser);
+router.put("/password",authMiddleWare,updatePassword)
 router.put("/edit-user",authMiddleWare,isAdmin, updatedAUser);
 router.put("/save-address",authMiddleWare, saveAddress);
 
