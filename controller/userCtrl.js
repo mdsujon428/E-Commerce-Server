@@ -360,13 +360,44 @@ const userCart = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { cart } = req.body;
     validateMongoDbId(_id);
-   try {
+    try {
+        let products = [];
        const user = await User.findById(_id);
        // check user already have product in cart.
        const alreadyExistCart = await Cart.findOne({ orderby: _id });
        if (alreadyExistCart) {
            alreadyExistCart.remove();
        }
+       for (let i = 0; i < cart.length; i++) {
+           let object = {};
+           object.product = cart[i]._id;
+           object.count = cart[i].count;
+           object.color = cart[i].color;
+           let getPrice = await Product.findById(cart[i]._id).select('price').exec();
+           object.price = getPrice.price;
+           products.push(object);
+        }
+        
+        let cartTotal = 0;
+        for (let i = 0; i < products.length; i++) {
+             cartTotal = cartTotal + (products[i].price * products[i].count);
+        }
+        //console.log(products)
+        const newCart = await Cart.create({
+            products,
+            cartTotal,
+            orderby: user?._id,
+            totalAfterDiscount: 0,
+            
+        })
+        // let newCart = {
+        //     products,
+        //     cartTotal,
+        //     orderby:user?._id,
+        //     totalAfterDiscount: 0,
+        // }
+        console.log(newCart);
+        res.status(200).json(newCart)
    } catch (error) {
        throw new Error(error);
    }
