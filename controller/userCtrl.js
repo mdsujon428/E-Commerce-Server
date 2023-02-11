@@ -1,14 +1,15 @@
 const User = require('../models/userModel');
-const asyncHandler = require('express-async-handler');
+const Product = require('../models/productModel');
+const Cart = require('../models/cartModel')
 const { generateToken } = require('../config/jwtToken');
 const { validateMongoDbId } = require('../utils/validateMongodbId');
 const { generateRefreshToken } = require('../config/refreshToken');
+const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const { sendEmail } = require('./emailCtrl');
 const crypto = require('crypto');
 
-
-// create a user
+// create a 
 const createUser = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const findUser = await User.findOne({ email });
@@ -355,6 +356,22 @@ const getWishList = asyncHandler(async(req, res)=> {
     }
 })
 
+const userCart = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { cart } = req.body;
+    validateMongoDbId(_id);
+   try {
+       const user = await User.findById(_id);
+       // check user already have product in cart.
+       const alreadyExistCart = await Cart.findOne({ orderby: _id });
+       if (alreadyExistCart) {
+           alreadyExistCart.remove();
+       }
+   } catch (error) {
+       throw new Error(error);
+   }
+})
+
 module.exports = {
     getAUser,
     blockUser,
@@ -371,5 +388,6 @@ module.exports = {
     forgotPasswordToken,
     resetPassword,
     getWishList,
-    saveAddress
+    saveAddress,
+    userCart
 }
