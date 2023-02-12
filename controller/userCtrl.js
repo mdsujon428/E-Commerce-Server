@@ -390,17 +390,23 @@ const userCart = asyncHandler(async (req, res) => {
             totalAfterDiscount: 0,
             
         })
-        // let newCart = {
-        //     products,
-        //     cartTotal,
-        //     orderby:user?._id,
-        //     totalAfterDiscount: 0,
-        // }
-        console.log(newCart);
-        res.status(200).json(newCart)
+        res.status(201).json(newCart)
    } catch (error) {
        throw new Error(error);
    }
+})
+
+const getUserCart = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    validateMongoDbId(_id);
+    try {
+        const getUserCart = await Cart.findOne({
+            orderby:_id
+        })
+        res.status(200).json(getUserCart)
+    } catch (error) {
+        throw  new Error(error)
+    }
 })
 
 module.exports = {
@@ -420,5 +426,6 @@ module.exports = {
     resetPassword,
     getWishList,
     saveAddress,
-    userCart
+    userCart,
+    getUserCart
 }
