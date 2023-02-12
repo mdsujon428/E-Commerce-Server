@@ -1,4 +1,6 @@
 const Coupon = require('../models/couponModel');
+const User = require('../models/userModel');
+const Cart = require('../models/cartModel');
 const asyncHandler = require('express-async-handler');
 const { validateMongoDbId } = require('../utils/validateMongodbId');
 
@@ -44,9 +46,31 @@ const deleteCoupons = asyncHandler(async (req, res) => {
     }
 })
 
+// Apply coupon to get discount
+const applyCoupon = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { coupon } = req.body;
+    validateMongoDbId(_id);
+
+    const user = await User.findById(_id);
+    const validCoupon = await Coupon.findOne({ name: coupon });
+    if (validCoupon === null) throw new Error('Invalid Error..!')
+    const { cartTotal } = await Cart.findOne({
+        orderby: user._id
+    })
+    const totalAfterDiscount = cartTotal -  (cartTotal * validCoupon.discount) / 100;
+    await Cart.findOneAndUpdate(
+        { orderby: user._id },
+        { totalAfterDiscount },
+        { new: true }
+    );
+    res.json(totalAfterDiscount)
+})
+
 module.exports = {
     createCoupon,
     getAllCoupons,
     updateCoupons,
-    deleteCoupons
+    deleteCoupons,
+    applyCoupon
 }

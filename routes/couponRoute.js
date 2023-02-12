@@ -4,11 +4,13 @@ const {
     createCoupon,
     getAllCoupons,
     updateCoupons,
-    deleteCoupons
+    deleteCoupons,
+    applyCoupon
 } = require('../controller/couponCtrl');
 const { authMiddleWare, isAdmin } = require('../middlewares/authMiddleware');
 
 router.post('/', authMiddleWare, isAdmin, createCoupon);
+router.post('/apply-coupon',authMiddleWare,applyCoupon)
 router.get('/', authMiddleWare, isAdmin, getAllCoupons);
 router.put('/:id', authMiddleWare, isAdmin,updateCoupons);
 router.delete('/:id', authMiddleWare, isAdmin,deleteCoupons);
