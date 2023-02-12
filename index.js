@@ -10,6 +10,7 @@ const blogRoute = require('./routes/blogRoute');
 const categoryRoute = require('./routes/prodCategoryRoute');
 const blogCategoryRoute = require('./routes/blogCatRoute');
 const couponRoute = require('./routes/couponRoute');
+const orderRoute = require('./routes/orderRoute');
 const brandCategoryRoute = require('./routes/brandRoute');
 
 const PORT = process.env.PORT || 8081;
@@ -34,6 +35,7 @@ app.use('/api/category',categoryRoute)
 app.use('/api/blogCategory',blogCategoryRoute)
 app.use('/api/brandCategory',brandCategoryRoute)
 app.use('/api/coupon',couponRoute)
+app.use('/api/order',orderRoute)
 
 app.use(notFound);
 app.use(errorHandler);
