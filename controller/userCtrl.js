@@ -402,7 +402,7 @@ const getUserCart = asyncHandler(async (req, res) => {
     try {
         const getUserCart = await Cart.findOne({
             orderby:_id
-        })
+        }).populate('products.product')
         res.status(200).json(getUserCart)
     } catch (error) {
         throw  new Error(error)
