@@ -220,6 +220,15 @@ const getAllUser = asyncHandler(async (req, res) => {
     }
 })
 
+//GET ALL SHIPPERS
+const getAllShippers = asyncHandler(async (req, res) => {
+    try {
+        const getUsers = await User.find({role:"shipper"});
+        res.status(200).json(getUsers);
+    } catch (error) {
+        throw new Error(error);
+    }
+})
 
 // get a user by id
 
@@ -444,4 +453,5 @@ module.exports = {
     userCart,
     getUserCart,
     emptyCart,
+    getAllShippers
 }

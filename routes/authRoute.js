@@ -33,7 +33,7 @@ router.get("/login", loginUser);
 router.get("/admin-login", loginAdmin);
 
 router.get("/all-users", getAllUser);
-
+router.get("/all-shipper", getAllShippers);
 router.get("/refresh",handleRefreshToken);
 router.get("/single-user", authMiddleWare, isAdmin, getAUser);
 router.get("/wishlist", authMiddleWare,getWishList);
