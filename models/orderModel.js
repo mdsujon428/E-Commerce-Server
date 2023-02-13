@@ -18,14 +18,19 @@ var orderSchema = new mongoose.Schema({
         default: "Pending",
         enum: [
             "Pending",
-            "On process",
+            "Confirm",
             "Shift",
-            "Cancel"
+            "Cancel",
+            "Delivered"
         ]
     },
     orderby: {
         type:mongoose.Schema.Types.ObjectId, 
         ref:"User"
+    },
+    shipperId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
     }
 },
 {

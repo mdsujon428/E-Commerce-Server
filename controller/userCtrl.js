@@ -220,6 +220,7 @@ const getAllUser = asyncHandler(async (req, res) => {
     }
 })
 
+
 // get a user by id
 
 const getAUser = asyncHandler(async (req, res) => {
@@ -442,5 +443,5 @@ module.exports = {
     saveAddress,
     userCart,
     getUserCart,
-    emptyCart
+    emptyCart,
 }

@@ -12,7 +12,7 @@ const router = express.Router();
 router.post('/', authMiddleWare, isAdmin,createCategory);
 router.put('/:id', authMiddleWare, isAdmin, updateCategory);
 router.get('/:id',authMiddleWare,isAdmin,getCategory)
-router.get('/',authMiddleWare,isAdmin,getAllCategory)
+router.get('/',authMiddleWare,getAllCategory)
 router.delete('/:id',authMiddleWare,isAdmin,deleteACategory)
 
 module.exports = router;
