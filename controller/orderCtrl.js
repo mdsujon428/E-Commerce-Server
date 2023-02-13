@@ -63,6 +63,22 @@ const getOrdersByUser = asyncHandler(async (req, res) => {
     }
 })
 
+// Change the order status and place ShipperId
+const changeOrderStatusAndShipperId = asyncHandler(async (req, res) => {
+    const { orderId,status,shipperId } = req.body;
+    validateMongoDbId(orderId);
+    try {
+        const orderStatus = await Order.findByIdAndUpdate(
+            orderId,
+            { orderStatus: status,shipperId },
+            {new:true}
+        )
+        res.status(201).json(orderStatus);
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
 const getOrderById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
@@ -82,7 +98,6 @@ const getAllOrders = asyncHandler(async (req, res) => {
         throw new Error(error);
     }
 })
-
 
 // Delete order by admin
 const deleteOrder = asyncHandler(async (req, res) => {

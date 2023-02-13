@@ -11,6 +11,8 @@ const {
 } = require('../controller/orderCtrl')
 router.post('/', authMiddleWare, createOrder);
 
+router.put("/", authMiddleWare, isAdmin, changeOrderStatusAndShipperId)
+
 router.get('/get-all-orders',authMiddleWare,isAdmin,getAllOrders)
 router.get('/:id',authMiddleWare,isAdmin,getOrderById)
 router.get('/', authMiddleWare, getOrdersByUser);
