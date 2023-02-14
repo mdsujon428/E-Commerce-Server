@@ -24,6 +24,10 @@ var orderSchema = new mongoose.Schema({
             "Delivered"
         ]
     },
+    orderVia: {
+        type: String,
+        //default:''
+    },
     orderby: {
         type:mongoose.Schema.Types.ObjectId, 
         ref:"User"

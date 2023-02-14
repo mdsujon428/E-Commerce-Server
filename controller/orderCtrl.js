@@ -8,6 +8,7 @@ const {validateMongoDbId} = require('../utils/validateMongodbId');
 
 // create an order 
 const createOrder = asyncHandler(async (req, res) => {
+    const orderVia = req.rawHeaders[req.rawHeaders.indexOf('User-Agent') + 1];
     const { COD, couponApplied } = req.body;
     const { _id } = req.user;
     validateMongoDbId(_id);
@@ -15,7 +16,7 @@ const createOrder = asyncHandler(async (req, res) => {
         if (!COD) throw new Error("Create cash order failed");
         const user = await User.findById(_id);
         let userCart = await Cart.findOne({ orderby: user._id });
-        //console.log(userCart)
+        if(userCart=== null) throw new Error('User does not have any product in the cart')
         let finalAmount = 0;
         if (couponApplied && userCart.totalAfterDiscount) {
             finalAmount = userCart.totalAfterDiscount * 100;
@@ -32,6 +33,7 @@ const createOrder = asyncHandler(async (req, res) => {
                 currency: "BDT"
             },
             orderby: user._id,
+            orderVia
         }).save();
         let update = userCart.products.map((item) => {
             return {
